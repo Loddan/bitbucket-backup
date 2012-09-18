@@ -1,9 +1,10 @@
 *.py[co]
-.DS_Store
-.idea
-.Python
+src/
 *~
+*.log
 env
+*#
+**#
 # Packages
 *.egg
 *.egg-info
