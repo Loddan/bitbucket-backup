@@ -32,8 +32,6 @@ def clone_repo(repo, backup_dir, http, password):
 
 def update_repo(repo, backup_dir):
     scm = repo.get('scm')
-    # slug = repo.get('slug')
-    # username = repo.get('owner')
     command = None
     os.chdir(backup_dir)
     if scm == 'hg':
