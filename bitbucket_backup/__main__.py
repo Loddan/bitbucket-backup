@@ -5,7 +5,7 @@ import argparse
 from getpass import getpass
 
 
-def clone_repo(repo, backup_dir, http, password):
+def clone_repo(repo, backup_dir, http, password, mirror):
     scm = repo.get('scm')
     slug = repo.get('slug')
     username = repo.get('owner')
@@ -24,6 +24,8 @@ def clone_repo(repo, backup_dir, http, password):
         else:
             command = "git clone git@bitbucket.org:%s/%s.git %s"\
                         % (username, slug, backup_dir)
+        if mirror:
+            command += " --mirror"
     if not command:
         return
     print command
@@ -54,10 +56,13 @@ def main():
                         help="Local backup location")
     parser.add_argument('--http', action='store_true',
                         help="Fetch via https")
+    parser.add_argument('--mirror', action='store_true',
+                        help="Cloning with mirror option (only applicable with Git repositories)")
     args = parser.parse_args()
     username = args.username
     password = args.password
     location = args.location
+    mirror   = args.mirror
     http = args.http
     if not password:
         password = getpass(prompt='Enter your bitbucket password: ')
@@ -77,7 +82,7 @@ def main():
         print "Backing up %s" % repo.get("name")
         backup_dir = os.path.join(location, repo.get("slug"))
         if not os.path.isdir(backup_dir):
-            clone_repo(repo, backup_dir, http, password)
+            clone_repo(repo, backup_dir, http, password, mirror)
         else:
             update_repo(repo, backup_dir)
 
